@@ -1,0 +1,27 @@
+Introduction
+------------
+
+This is euler, a collection of Python routines for solving various problems
+in applied mathematics. The goal is to provide a simple Python interface
+that you can use and expand upon in your studies and work. Therefore, no
+claims are made regarding optimality or elegance of the algorithms and
+Python implementation.
+
+euler is free software, distributed under the terms of the GNU General
+Public License <http://www.gnu.org/licenses/gpl.html>.
+
+Contents
+--------
+
+  ode    : Numerical schemes for solving systems of ODEs 
+  solver : Iterative solvers for systems of equations
+  test   : Example programs to demonstrate the library's functionality
+
+Bugs
+----
+
+Comments, criticisms and bug reports are very welcome and may be sent to the
+kepler maintainer by email or the project's website.
+
+Shiva Iyer
+shiva.iyer AT g m a i l DOT c o m
