@@ -1,4 +1,4 @@
-# impeuler.py - Solve ODE systems using the implicit Euler method
+# impadams.py - Solve ODEs using the multistep Adams-Moulton method
 # Copyright (C) 2017 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -18,24 +18,44 @@ from numpy import array,eye,linspace,zeros
 from numpy.linalg import norm
 from solver.gausseli import gausseli
 
-def impeuler(f, dfdy, a, b, n, Y0):
+_K = array([[1.0, 0, 0, 0, 0, 0],
+            [0.5, 0.5, 0, 0, 0, 0],
+            [x/12.0 for x in [5, 8, -1, 0, 0, 0]],
+            [x/24.0 for x in [9, 19, -5, 1, 0, 0]],
+            [x/720.0 for x in [251, 646, -264, 106, -19, 0]],
+            [x/1440.0 for x in [475, 1427, -798, 482, -173, 27]]])
+
+def impadams(f, dfdy, a, b, n, Y0, s = 2):
+    if (s < 0 or s > 5):
+        return(array([]), array([]))
+
     h = (b - a)/(n - 1.0)
     I = eye(len(Y0))
 
     t = linspace(a, b, n)
     Y = zeros([n, len(Y0)])
     Y[0,:] = Y0
+
     for i in range(1, n):
+        if (i >= s):
+            r = s
+        else:
+            r = i
+
         guess = Y[i-1,:]
 	for iter in range(10):
-	    b = Y[i-1,:] + h*f(t[i-1], guess) - guess
+            b = _K[r,0]*f(t[i-1], guess)
+            for j in range(1, r+1):
+                b += _K[r,j]*f(t[i-j], Y[i-j])
+
+            b = Y[i-1,:] + h*b - guess
             if (norm(b, 2) <= 1E-12):
 		Y[i,:] = guess
 		break
 
-	    J = h*dfdy(t[i-1], guess) - I
+            J = h*_K[r,0]*dfdy(t[i-1], guess) - I
 	    guess = guess - gausseli(J, b)
-	else:
+        else:
             return(array([]), array([]))
 
     return(t, Y)

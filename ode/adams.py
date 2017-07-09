@@ -23,9 +23,9 @@ _K = array([[1.0, 0, 0, 0, 0, 0],
             [x/720.0 for x in [1901, -2774, 2616, -1274, 251, 0]],
             [x/1440.0 for x in [4277, -7923, 9982, -7298, 2877, -475]]])
 
-def adamsbash(f, a, b, n, Y0, s = 2):
+def adams(f, a, b, n, Y0, s = 2):
     if (s < 1 or s > 6):
-        return(array([]))
+        return(array([]), array([]))
 
     h = (b - a)/(n - 1.0)
 

@@ -26,7 +26,7 @@ def trapezoid(f, dfdy, a, b, n, Y0):
     Y = zeros([n, len(Y0)])
     Y[0,:] = Y0
     for i in range(1, n):
-        guess = Y0
+        guess = Y[i-1,:]
 	for iter in range(10):
 	    b = Y[i-1,:] + h*(f(t[i-1], guess) + \
                 f(t[i-1], Y[i-1,:]))/2.0 - guess
