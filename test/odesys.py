@@ -26,6 +26,7 @@ from ode.euler import euler
 from ode.impeuler import impeuler
 from ode.trapezoid import trapezoid
 from ode.rk4 import rk4
+from ode.adams import adamsbash
 
 """ Solve the Initial Value Problem dy(t)/dt = A*y(t); y(0) = [1, 0]
 where A = [0.2   -1]
@@ -45,8 +46,8 @@ dfdy = lambda t,Y: A
 b = 1
 n = 20 + 1
 
-scheme = ["Explicit Euler", "Implicit Euler", "Trapezoidal",
-          "4th order Runge-Kutta"]
+scheme = ["Euler", "Implicit Euler", "Trapezoidal",
+          "4th order Runge-Kutta", "4-step Adams-Bashforth"]
 for i in range(len(scheme)):
     if (i == 0):
         t,Yap = euler(f, 0, b, n, Y0)
@@ -57,6 +58,8 @@ for i in range(len(scheme)):
         t,Yap = trapezoid(f, dfdy, 0, b, n, Y0)
     elif (i == 3):
         t,Yap = rk4(f, 0, b, n, Y0)
+    elif (i == 4):
+        t,Yap = adamsbash(f, 0, b, n, Y0, 4)
 
     print("%s method:" % scheme[i])
     print("%-5s %-17s %-17s %-12s" % ("Time", "Exact value",
