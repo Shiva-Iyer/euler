@@ -13,9 +13,10 @@ Public License <http://www.gnu.org/licenses/gpl.html>.
 Contents
 --------
 
-  ode    : Numerical schemes for solving systems of ODEs 
-  solver : Iterative solvers for systems of equations
-  test   : Example programs to demonstrate the library's functionality
+  interpol : Various interpolation methods
+  ode      : Numerical schemes for solving systems of ODEs 
+  solver   : Iterative solvers for systems of equations
+  test     : Example programs to demonstrate the library's functionality
 
 Bugs
 ----
