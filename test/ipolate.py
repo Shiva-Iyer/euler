@@ -29,7 +29,7 @@ differences. Xint is the set of interpolants.
 """
 
 X = array([0.0, 30.0, 45.0, 60.0, 90.0])
-Y = array([0.0, 0.5, sqrt(0.5), sqrt(0.75), 1.0])
+Y = array([sin(x*pi/180.0) for x in X])
 
 D = ddtable(X, Y)
 

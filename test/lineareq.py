@@ -16,11 +16,12 @@
 
 import sys
 from os import path
+from numpy import array
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-from numpy import array
 from solver.gausseli import gausseli
+from solver.tridiag import tdsolve
 
 """ Solve the system x+y+z = 8, 2*x+3*y-4*z = -7, 3*x-5*y-7*z = -24
 having the unique solution (3, 1, 4).
@@ -51,4 +52,14 @@ A = array([[1.0, 1, 1], [3, 3, 3], [3, -5, -7]])
 b = array([8.0, 8, -24])
 
 x = gausseli(A, b)
-print("Solution for inconsistent system                  : " + str(x))
+print("Solution for inconsistent system                  : " + str(x) + "\n")
+
+""" Solve the tridiagonal system x-y = -5, 2x-y+3z = 0, y-6z = 1
+having the unique solution (2, 7, 1).
+"""
+
+A = array([[1.0, -1.0, 0.0], [2.0, -1.0, 3.0], [0.0, 1.0, -6.0]])
+b = array([-5.0, 0.0, 1.0])
+
+x = tdsolve(A, b)
+print("Solution for tridiagonal system                   : " + str(x))

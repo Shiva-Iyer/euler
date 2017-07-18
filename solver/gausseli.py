@@ -27,7 +27,7 @@ def gausseli(A, b):
 
     for i in range(m):
         max = i
-        for j in range(i + 1, m):
+        for j in range(i+1, m):
             if (abs(A[j,i]) > abs(A[max,i])):
                 max = j
 
@@ -38,12 +38,13 @@ def gausseli(A, b):
         if (A[i,i] == 0.0):
             continue
 
-        for j in range(i + 1, m):
-            mul = A[j,i]/A[i,i]
-            A[j,:] = A[j,:] - A[i,:]*mul
-            b[j] -= b[i]*mul
+        for j in range(i+1, m):
+            if (A[j,i] != 0.0):
+                mul = A[j,i]/A[i,i]
+                A[j,:] = A[j,:] - A[i,:]*mul
+                b[j] -= b[i]*mul
 
-    for i in range(m - 1, -1, -1):
+    for i in range(m-1, -1, -1):
         for j in range(i + 1, m):
             b[i] -= A[i,j]*b[j]
        
