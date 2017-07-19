@@ -1,4 +1,4 @@
-# polinter.py - Test polynomial interpolation functions
+# polinter.py - Test interpolation functions
 # Copyright (C) 2017 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,26 +21,35 @@ from numpy import array
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-from interpol.newton import ddtable,interp
+from interpol import newton as newt
+from interpol import spline as spln
 
-""" Test polynomial interpolation on sin(x) where x is in degrees.
-X and Y are the data points used to construct the table of divided
-differences. Xint is the set of interpolants.
+""" Test interpolation on sin(x) where x is in degrees. X and Y are
+the data points. Xint is the set of points to interpolate on.
 """
 
 X = array([0.0, 30.0, 45.0, 60.0, 90.0])
 Y = array([sin(x*pi/180.0) for x in X])
 
-D = ddtable(X, Y)
-
 Xint = array(range(0, 100, 10), dtype = "float64")
 Yexa = array([sin(x*pi/180.0) for x in Xint])
 
-Yint = interp(D, X, Xint)
+scheme = ["Newton divided differences", "Natural cubic spline",
+          "Clamped cubic spline", "Not-a-knot cubic spline"]
 
-print("Newton divided differences method:")
-print("%-4s: %-8s %-8s %-12s" % (
-    "x(o)", "Exact", "Interp.", "Error"))
-for i in range(len(Xint)):
-    print("%4.1f: %f %f %E" % (
-        Xint[i], Yexa[i], Yint[i], abs(Yexa[i] - Yint[i])))
+for s in range(len(scheme)):
+    if (s == 0):
+        D = newt.ddtable(X, Y)
+        Yint = newt.interp(D, X, Xint)
+    elif (s >= 1 and s <= 3):
+        S = spln.cspline(X, Y, s - 1)
+        Yint = spln.interp(S, X, Xint)
+
+    print("%s method:" % (scheme[s]))
+    print("%-4s: %-8s %-8s %-12s" % (
+        "x(o)", "Exact", "Interp.", "Error"))
+    for i in range(len(Xint)):
+        print("%4.1f: %f %f %E" % (
+            Xint[i], Yexa[i], Yint[i], abs(Yexa[i] - Yint[i])))
+
+    print("")
