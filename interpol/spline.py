@@ -34,19 +34,19 @@ def cspline(X, Y, type = 0, slope = array([0.0, 0.0])):
         A[i,i-1:i+2] = [h[i-1], 2.0*(h[i-1] + h[i]), h[i]]
         b[i] = 3.0*(g[i]/h[i] - g[i-1]/h[i-1])
 
-    if (type == 0):    # Natural spline
+    if (type == 0):    # "Not a knot" spline, the default
+        A[0,:3] = [h[1], -h[0] - h[1], h[0]]
+        A[n-1,n-3:n] = [h[n-2], -h[n-3] - h[n-2], h[n-3]]
+    elif (type == 1):  # Natural spline
         A[0,0] = 1.0
         A[n-1,n-1] = 1.0
-    elif (type == 1):  # Clamped spline
+    else:              # Clamped spline
         A[0,:2] = [2*h[0], h[0]]
         A[n-1,n-2:n] = [h[n-2], 2*h[n-2]]
         b[0] = 3.0*(g[0]/h[0] - slope[0])
         b[n-1] = 3.0*(slope[1] - g[n-2]/h[n-2])
-    else:              # "Not a knot" spline
-        A[0,:3] = [h[1], -h[0] - h[1], h[0]]
-        A[n-1,n-3:n] = [h[n-2], -h[n-3] - h[n-2], h[n-3]]
 
-    if (type == 2):    # "Not a knot" spline
+    if (type == 0):    # "Not a knot" spline
         c = gausseli(A, b)
     else:
         c = tdsolve(A, b)

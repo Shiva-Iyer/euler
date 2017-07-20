@@ -34,8 +34,8 @@ Y = array([sin(x*pi/180.0) for x in X])
 Xint = array(range(0, 100, 10), dtype = "float64")
 Yexa = array([sin(x*pi/180.0) for x in Xint])
 
-scheme = ["Newton divided differences", "Natural cubic spline",
-          "Clamped cubic spline", "Not-a-knot cubic spline"]
+scheme = ["Newton divided differences", "Not-a-knot cubic spline",
+          "Natural cubic spline", "Clamped cubic spline"]
 
 for s in range(len(scheme)):
     if (s == 0):
