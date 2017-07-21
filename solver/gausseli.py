@@ -25,35 +25,36 @@ def gausseli(A, b):
     else:
         return(array([]))
 
-    for i in range(m):
+    C,x = A.copy(), b.copy()
+    for i in xrange(m):
         max = i
-        for j in range(i+1, m):
-            if (abs(A[j,i]) > abs(A[max,i])):
+        for j in xrange(i+1, m):
+            if (abs(C[j,i]) > abs(C[max,i])):
                 max = j
 
         if (max != i):
-            A[i,:], A[max,:] = A[max,:].copy(), A[i,:].copy()
-            b[i], b[max] = b[max], b[i]
+            C[i,:], C[max,:] = C[max,:].copy(), C[i,:].copy()
+            x[i], x[max] = x[max], x[i]
 
-        if (A[i,i] == 0.0):
+        if (C[i,i] == 0.0):
             continue
 
-        for j in range(i+1, m):
-            if (A[j,i] != 0.0):
-                mul = A[j,i]/A[i,i]
-                A[j,:] = A[j,:] - A[i,:]*mul
-                b[j] -= b[i]*mul
+        for j in xrange(i+1, m):
+            if (C[j,i] != 0.0):
+                mul = C[j,i]/C[i,i]
+                C[j,:] = C[j,:] - C[i,:]*mul
+                x[j] -= x[i]*mul
 
-    for i in range(m-1, -1, -1):
-        for j in range(i + 1, m):
-            b[i] -= A[i,j]*b[j]
+    for i in xrange(m-1, -1, -1):
+        for j in xrange(i + 1, m):
+            x[i] -= C[i,j]*x[j]
        
-        if (A[i,i] != 0.0):
-            b[i] /= A[i,i]
+        if (C[i,i] != 0.0):
+            x[i] /= C[i,i]
         else:
-            if (b[i] == 0.0):
-                b[i] = 1.0
+            if (x[i] == 0.0):
+                x[i] = 1.0
             else:
                 return(array([]))
 
-    return(b)
+    return(x)

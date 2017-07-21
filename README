@@ -15,8 +15,8 @@ Contents
 
   interpol : Various interpolation methods
   ode      : Numerical schemes for solving systems of ODEs 
-  solver   : Iterative solvers for systems of equations
-  test     : Example programs to demonstrate the library's functionality
+  solver   : Solvers for linear and nonlinear systems of equations
+  test     : Example programs to demonstrate the library's functions
 
 Bugs
 ----

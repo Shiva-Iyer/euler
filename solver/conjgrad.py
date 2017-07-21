@@ -1,4 +1,5 @@
-# newton.py - Solve systems of equations using Newton's method
+# conjgrad.py - Solve linear equations with symmetric, positive-definite
+#               matrices using the iterative conjugate gradient method
 # Copyright (C) 2017 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,20 +15,33 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from numpy import array,dot
+from numpy import array,dot,zeros
 from numpy.linalg import norm
-from gausseli import gausseli
 
-def newton(f, dfdy, Y0, tol = 1E-12, maxiter = 20):
-    for iter in range(maxiter):
-        c = f(Y0)
-        J = dfdy(Y0)
-        Y = Y0 - gausseli(J, c)
-        if (norm(Y - Y0, 2) <= tol):
-            break
-
-        Y0 = Y
+def conjgrad(A, b, tol = 1E-12, maxiter = 10):
+    if (A.ndim == 2 and b.ndim == 1):
+        m,n = A.shape
+        if (m != n or m != len(b)):
+            return(array([]))
     else:
-        Y = array([])
+        return(array([]))
 
-    return(Y, iter + 1)
+    x = zeros(n)
+    r,p = b,b
+    for iter in range(maxiter):
+        Ap = A.dot(p)
+        nr = norm(r, 2)**2
+
+        alpha = nr / p.dot(Ap)
+        x = x + alpha*p
+        r = r - alpha*Ap
+        nnr = norm(r, 2)
+        beta = nnr**2 / nr
+        p = r + beta*p
+
+        if (nnr <= tol):
+            break
+    else:
+        x = array([])
+
+    return(x, iter + 1)

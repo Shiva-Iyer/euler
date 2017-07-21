@@ -28,13 +28,13 @@ def impeuler(f, dfdy, a, b, n, Y0):
     for i in range(1, n):
         guess = Y[i-1,:]
 	for iter in range(10):
-	    b = Y[i-1,:] + h*f(t[i-1], guess) - guess
-            if (norm(b, 2) <= 1E-12):
+	    c = Y[i-1,:] + h*f(t[i-1], guess) - guess
+            if (norm(c, 2) <= 1E-12):
 		Y[i,:] = guess
 		break
 
 	    J = h*dfdy(t[i-1], guess) - I
-	    guess = guess - gausseli(J, b)
+	    guess = guess - gausseli(J, c)
 	else:
             return(array([]), array([]))
 

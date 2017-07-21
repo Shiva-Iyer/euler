@@ -22,6 +22,7 @@ sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 from solver.gausseli import gausseli
 from solver.tridiag import tdsolve
+from solver.conjgrad import conjgrad
 
 """ Solve the system x+y+z = 8, 2*x+3*y-4*z = -7, 3*x-5*y-7*z = -24
 having the unique solution (3, 1, 4).
@@ -63,3 +64,14 @@ b = array([-5.0, 0.0, 1.0])
 
 x = tdsolve(A, b)
 print("Solution for tridiagonal system                   : " + str(x))
+print("")
+
+""" Solve the symmetric positive-definite system below having unique
+solution (1/2, 1/3, 1/5) using the conjugate gradient method
+"""
+
+A = array([[2.0, -1.0, 0.0], [-1.0, 2.0, -1.0], [0.0, -1.0, 2.0]])
+b = array([2.0/3.0, -1.0/30.0, 1.0/15.0])
+
+x,iter = conjgrad(A, b)
+print("Conjugate gradient soln (%3d iter) for SPD system : %s" % (iter, str(x)))

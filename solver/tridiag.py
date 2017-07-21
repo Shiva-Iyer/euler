@@ -22,22 +22,27 @@ def tdsolve(A, b):
         m,n = A.shape
         if (m != n or m != len(b)):
             return(array([]))
+
+        for i in xrange(n):
+            for j in range(i-1) + range(i+2, n):
+                if (A[i,j] != 0.0):
+                    return(array([]))
     else:
         return(array([]))
 
     c = zeros(n-1)
     c[0] = A[0,1] / A[0,0]
-    for i in range(1, n-1):
+    for i in xrange(1, n-1):
         c[i] = A[i,i+1] / (A[i,i] - A[i,i-1]*c[i-1])
 
     d = zeros(n)
     d[0] = b[0] / A[0,0]
-    for i in range(1, n):
+    for i in xrange(1, n):
         d[i] = (b[i] - A[i,i-1]*d[i-1]) / (A[i,i] - A[i,i-1]*c[i-1])
 
     x = zeros(n)
     x[n-1] = d[n-1]
-    for i in range(n-2, -1, -1):
+    for i in xrange(n-2, -1, -1):
         x[i] = d[i] - c[i]*x[i+1]
 
     return(x)

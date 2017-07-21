@@ -16,10 +16,10 @@
 
 import sys
 from os import path
+from numpy import array,dot
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-from numpy import array
 from solver.newton import newton
 
 """ Solve the system y^2 - x*y = 4, x^2 - xy = -3, which has solutions
@@ -32,10 +32,26 @@ dfdy = lambda y: array([[-y[1], 2.0*y[1]-y[0]],
 
 Y0 = array([1.0, 0])
 Y,iter = newton(f, dfdy, Y0)
-print("After %2d iterations from [1, 0]: x = %9.6f, y = %9.6f" % (
+print("Nonlin. sys: %2d iter. from [1, 0]   : x = %9.6f, y = %9.6f" % (
     iter, Y[0], Y[1]))
 
 Y0 = array([0, 1.0])
 Y,iter = newton(f, dfdy, Y0)
-print("After %2d iterations from [0, 1]: x = %9.6f, y = %9.6f" % (
+print("Nonlin. sys: %2d iter. from [0, 1]   : x = %9.6f, y = %9.6f" % (
     iter, Y[0], Y[1]))
+
+""" Solve the system x+y+z = 8, 2*x+3*y-4*z = -7, 3*x-5*y-7*z = -24
+having the unique solution (3, 1, 4).
+"""
+
+A = array([[1.0, 1, 1], [2, 3, -4], [3, -5, -7]])
+b = array([8.0, -7, -24])
+
+f = lambda y: A.dot(y) - b
+dfdy = lambda y: A
+
+Y0 = array([0, 0, 0])
+Y,iter = newton(f, dfdy, Y0)
+print("")
+print("Linear sys.: %2d iter. from [0, 0, 0]: x = %9.6f, y = %9.6f, z = %9.6f" % (
+    iter, Y[0], Y[1], Y[2]))

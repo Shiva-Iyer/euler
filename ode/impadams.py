@@ -44,17 +44,17 @@ def impadams(f, dfdy, a, b, n, Y0, s = 2):
 
         guess = Y[i-1,:]
 	for iter in range(10):
-            b = _K[r,0]*f(t[i-1], guess)
+            c = _K[r,0]*f(t[i-1], guess)
             for j in range(1, r+1):
-                b += _K[r,j]*f(t[i-j], Y[i-j])
+                c += _K[r,j]*f(t[i-j], Y[i-j])
 
-            b = Y[i-1,:] + h*b - guess
-            if (norm(b, 2) <= 1E-12):
+            c = Y[i-1,:] + h*c - guess
+            if (norm(c, 2) <= 1E-12):
 		Y[i,:] = guess
 		break
 
             J = h*_K[r,0]*dfdy(t[i-1], guess) - I
-	    guess = guess - gausseli(J, b)
+	    guess = guess - gausseli(J, c)
         else:
             return(array([]), array([]))
 

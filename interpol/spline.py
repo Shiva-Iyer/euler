@@ -19,7 +19,7 @@ from solver.gausseli import gausseli
 from solver.tridiag import tdsolve
 
 def cspline(X, Y, type = 0, slope = array([0.0, 0.0])):
-    if (not type in [0, 1, 2]):
+    if (not type in range(3)):
         return(array([]))
 
     n = len(X)

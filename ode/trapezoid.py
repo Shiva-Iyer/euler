@@ -19,7 +19,7 @@ from numpy.linalg import norm
 from solver.gausseli import gausseli
 
 def trapezoid(f, dfdy, a, b, n, Y0):
-    h = (b-a)/(n-1.0)
+    h = (b - a)/(n - 1.0)
     I = eye(len(Y0))
 
     t = linspace(a, b, n)
@@ -28,14 +28,14 @@ def trapezoid(f, dfdy, a, b, n, Y0):
     for i in range(1, n):
         guess = Y[i-1,:]
 	for iter in range(10):
-	    b = Y[i-1,:] + h*(f(t[i-1], guess) + \
+	    c = Y[i-1,:] + h*(f(t[i-1], guess) + \
                 f(t[i-1], Y[i-1,:]))/2.0 - guess
-            if (norm(b, 2) <= 1E-12):
+            if (norm(c, 2) <= 1E-12):
 		Y[i,:] = guess
 		break
 
 	    J = h*dfdy(t[i-1], guess)/2.0 - I
-	    guess = guess - gausseli(J, b)
+	    guess = guess - gausseli(J, c)
 	else:
             return(array([]), array([]))
 
