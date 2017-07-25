@@ -1,4 +1,4 @@
-# newton.py - Solve systems of equations using Newton's method
+# jacobian.py - Estimate the Jacobian matrix using finite differences
 # Copyright (C) 2017 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,25 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from numpy import array,dot
-from numpy.linalg import norm
-from gausseli import gausseli
-from pde.jacobian import fdestim
+from numpy import array,zeros
 
-def newton(f, dfdy, Y0, tol = 1E-12, maxiter = 20):
-    for iter in range(maxiter):
-        c = f(Y0)
-        if (not dfdy is None):
-            J = dfdy(Y0)
-        else:
-            J = fdestim(f, Y0, 1E-2)
+def fdestim(fy, Y, h):
+    n = len(Y)
+    J = zeros([n, n])
+    for dy in [-1.0, 1.0]:
+        for i in range(n):
+            Y1 = Y.copy()
+            Y1[i] += dy*h
+            fval = fy(Y1)
+            J[:,i] += fval*dy
 
-        Y = Y0 - gausseli(J, c)
-        if (norm(Y - Y0, 2) <= tol):
-            break
-
-        Y0 = Y
-    else:
-        Y = array([])
-
-    return(Y, iter + 1)
+    J /= (2.0*h)
+    return(J)

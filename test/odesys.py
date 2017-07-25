@@ -63,7 +63,7 @@ for i in range(len(scheme)):
     elif (i == 4):
         t,Yap = adams(f, 0, b, n, Y0, 4)
     elif (i == 5):
-        t,Yap = impadams(f, dfdy, 0, b, n, Y0, 3)
+        t,Yap = impadams(f, None, 0, b, n, Y0, 3)
 
     print("%s method:" % scheme[i])
     print("%-5s %-17s %-17s %-12s" % ("Time", "Exact value",

@@ -27,16 +27,14 @@ from solver.newton import newton
 """
 
 f = lambda y: array([y[1]*y[1]-y[0]*y[1]-4.0, y[0]*y[0]-y[0]*y[1]+3])
-dfdy = lambda y: array([[-y[1], 2.0*y[1]-y[0]],
-                        [2*y[0]-y[1], -y[0]]])
 
 Y0 = array([1.0, 0])
-Y,iter = newton(f, dfdy, Y0)
+Y,iter = newton(f, None, Y0)
 print("Nonlin. sys: %2d iter. from [1, 0]   : x = %9.6f, y = %9.6f" % (
     iter, Y[0], Y[1]))
 
 Y0 = array([0, 1.0])
-Y,iter = newton(f, dfdy, Y0)
+Y,iter = newton(f, None, Y0)
 print("Nonlin. sys: %2d iter. from [0, 1]   : x = %9.6f, y = %9.6f" % (
     iter, Y[0], Y[1]))
 
@@ -50,7 +48,7 @@ b = array([8.0, -7, -24])
 f = lambda y: A.dot(y) - b
 dfdy = lambda y: A
 
-Y0 = array([0, 0, 0])
+Y0 = array([1, 1, 1])
 Y,iter = newton(f, dfdy, Y0)
 print("")
 print("Linear sys.: %2d iter. from [0, 0, 0]: x = %9.6f, y = %9.6f, z = %9.6f" % (

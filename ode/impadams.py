@@ -17,6 +17,7 @@
 from numpy import array,eye,linspace,zeros
 from numpy.linalg import norm
 from solver.gausseli import gausseli
+from pde.jacobian import fdestim
 
 _K = array([[1.0, 0, 0, 0, 0, 0],
             [0.5, 0.5, 0, 0, 0, 0],
@@ -53,8 +54,12 @@ def impadams(f, dfdy, a, b, n, Y0, s = 2):
 		Y[i,:] = guess
 		break
 
-            J = h*_K[r,0]*dfdy(t[i-1], guess) - I
-	    guess = guess - gausseli(J, c)
+            if (not dfdy is None):
+                J = h*_K[r,0]*dfdy(t[i-1], guess) - I
+            else:
+                J = h*_K[r,0]*fdestim(lambda z: f(t[i-1],z),guess,h) - I
+
+            guess = guess - gausseli(J, c)
         else:
             return(array([]), array([]))
 

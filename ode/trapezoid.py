@@ -17,6 +17,7 @@
 from numpy import array,eye,linspace,zeros
 from numpy.linalg import norm
 from solver.gausseli import gausseli
+from pde.jacobian import fdestim
 
 def trapezoid(f, dfdy, a, b, n, Y0):
     h = (b - a)/(n - 1.0)
@@ -34,7 +35,11 @@ def trapezoid(f, dfdy, a, b, n, Y0):
 		Y[i,:] = guess
 		break
 
-	    J = h*dfdy(t[i-1], guess)/2.0 - I
+            if (not dfdy is None):
+	        J = h*dfdy(t[i-1], guess)/2.0 - I
+            else:
+	        J = h*fdestim(lambda z: f(t[i-1], z), guess, h)/2.0 - I
+                
 	    guess = guess - gausseli(J, c)
 	else:
             return(array([]), array([]))
