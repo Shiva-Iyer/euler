@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from numpy import array,zeros
-from solver.gausseli import gausseli
-from solver.tridiag import tdsolve
+from linalg.gausseli import gausseli
+from linalg.tridiag import tdsolve
 
 def cspline(X, Y, type = 0, slope = array([0.0, 0.0])):
     if (not type in range(3)):

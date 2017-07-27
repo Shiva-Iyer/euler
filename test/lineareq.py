@@ -20,8 +20,9 @@ from numpy import array
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-from solver.gausseli import gausseli
-from solver.tridiag import tdsolve
+from linalg.gausseli import gausseli
+from linalg.tridiag import tdsolve
+from linalg.cholesky import solve
 from solver.conjgrad import conjgrad
 
 """ Solve the system x+y+z = 8, 2*x+3*y-4*z = -7, 3*x-5*y-7*z = -24
@@ -75,3 +76,14 @@ b = array([2.0/3.0, -1.0/30.0, 1.0/15.0])
 
 x,iter = conjgrad(A, b)
 print("Conjugate gradient soln (%3d iter) for SPD system : %s" % (iter, str(x)))
+print("")
+
+""" Solve the symmetric positive-definite system below having unique
+solution (-2, 3, -5) using Cholesky decomposition
+"""
+
+A = array([[4.0, 12, -16], [12, 37, -43], [-16, -43, 98]])
+b = array([108.0, 302, -587])
+
+x = solve(A, b)
+print("Cholesky decomposition solution for SPD system    : " + str(x))

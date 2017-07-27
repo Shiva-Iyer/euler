@@ -16,7 +16,7 @@
 
 import sys
 from os import path
-from numpy import array,dot
+from numpy import array
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 

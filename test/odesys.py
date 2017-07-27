@@ -17,7 +17,7 @@
 import sys
 from os import path
 from math import cos,exp,sin
-from numpy import array,dot
+from numpy import array
 from numpy.linalg import norm
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))

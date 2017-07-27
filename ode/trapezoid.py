@@ -16,7 +16,7 @@
 
 from numpy import array,eye,linspace,zeros
 from numpy.linalg import norm
-from solver.gausseli import gausseli
+from linalg.gausseli import gausseli
 from pde.jacobian import fdestim
 
 def trapezoid(f, dfdy, a, b, n, Y0):

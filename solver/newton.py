@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from numpy import array,dot
+from numpy import array
 from numpy.linalg import norm
-from gausseli import gausseli
+from linalg.gausseli import gausseli
 from pde.jacobian import fdestim
 
 def newton(f, dfdy, Y0, tol = 1E-12, maxiter = 20):

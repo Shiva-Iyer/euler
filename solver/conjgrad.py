@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from numpy import array,dot,zeros
+from numpy import array,zeros
 from numpy.linalg import norm
 
 def conjgrad(A, b, tol = 1E-12, maxiter = 10):
