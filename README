@@ -13,9 +13,10 @@ Public License <http://www.gnu.org/licenses/gpl.html>.
 Contents
 --------
 
-  interpol : Various interpolation methods
+  interpol : Various interpolation techniques
   linalg   : Topics in linear algebra
-  ode      : Numerical schemes for solving systems of ODEs 
+  misc     : Mathematical odds and ends
+  ode      : Numerical schemes for solving systems of ODEs
   solver   : Solvers for systems of equations
   test     : Example programs to demonstrate the library's functions
 
