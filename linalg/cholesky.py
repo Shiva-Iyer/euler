@@ -26,34 +26,37 @@ def decomp(A, LDLform = False):
         m,n = A.shape
         if (m != n):
             return(array([]))
+    elif (A.ndim == 0):
+        A = array([[A, 0.0], [0, 0]])
+        m,n = 1,1
     else:
         return(array([]))
 
     if (LDLform):
-        L = eye(n)
-        D = zeros([n, n])
+        L = eye(n, dtype = A.dtype)
+        D = zeros([n, n], dtype = A.dtype)
         for i in xrange(n):
             D[i,i] = A[i,i]
             for j in xrange(i):
                 L[i,j] = A[i,j]
                 for k in xrange(j):
-                    L[i,j] -= L[i,k]*L[j,k].conjugate()*D[k,k]
+                    L[i,j] -= L[i,k]*L[j,k].conj()*D[k,k]
 
                 L[i,j] /= D[j,j]
-                D[i,i] -= L[i,j]*L[i,j].conjugate()*D[j,j]
+                D[i,i] -= L[i,j]*L[i,j].conj()*D[j,j]
 
         return(L, D)
     else:
-        L = zeros([n, n])
+        L = zeros([n, n], dtype = A.dtype)
         for i in xrange(n):
             L[i,i] = A[i,i]
             for j in xrange(i):
                 L[i,j] = A[i,j]
                 for k in xrange(j):
-                    L[i,j] -= L[i,k]*L[j,k].conjugate()
+                    L[i,j] -= L[i,k]*L[j,k].conj()
 
                 L[i,j] /= L[j,j]
-                L[i,i] -= L[i,j]*L[i,j].conjugate()
+                L[i,i] -= L[i,j]*L[i,j].conj()
 
             L[i,i] = sqrt(L[i,i])
 
@@ -64,6 +67,9 @@ def solve(A, b):
     if (len(L) == 0):
         return(L)
 
+    if (b.ndim == 0):
+        b = array([b])
+    
     n = len(b)
     x = b.copy()
     for i in xrange(n):
@@ -72,7 +78,7 @@ def solve(A, b):
 
         x[i] /= L[i,i]
 
-    L = D.dot(L.transpose())
+    L = D.dot(L.T)
     for i in xrange(n-1, -1, -1):
         for j in xrange(i+1, n):
             x[i] -= L[i,j]*x[j]

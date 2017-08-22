@@ -17,6 +17,7 @@ Contents
   linalg   : Topics in linear algebra
   misc     : Mathematical odds and ends
   ode      : Numerical schemes for solving systems of ODEs
+  regress  : Functions for regression analysis
   solver   : Solvers for systems of equations
   test     : Example programs to demonstrate the library's functions
 
