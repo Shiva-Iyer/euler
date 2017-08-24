@@ -39,7 +39,7 @@ The exact solution of this system is y(t) = [exp(0.2*t)*cos(t)]
 
 e = 0.2
 A = array([[e, -1], [1, e]])
-Y0 = array([1.0, 0])
+Y0 = array([[1.0], [0]])
 
 f = lambda t,Y: A.dot(Y)
 dfdy = lambda t,Y: A
@@ -53,7 +53,7 @@ scheme = ["Euler", "Implicit Euler", "Trapezoidal",
 for i in range(len(scheme)):
     if (i == 0):
         t,Yap = euler(f, 0, b, n, Y0)
-        Yex = array([[exp(e*x)*cos(x), exp(e*x)*sin(x)] for x in t])
+        Yex = array([[exp(e*x)*cos(x), exp(e*x)*sin(x)] for x in t]).T
     elif (i == 1):
         t,Yap = impeuler(f, dfdy, 0, b, n, Y0)
     elif (i == 2):
@@ -68,8 +68,8 @@ for i in range(len(scheme)):
     print("%s method:" % scheme[i])
     print("%-5s %-17s %-17s %-12s" % ("Time", "Exact value",
                 "Approximation", "Error norm"))
-    for j in range(len(t)):
-        print("%4.2f: %f %f %f %f %E" % (t[j], Yex[j,0], Yex[j,1],
-                Yap[j,0], Yap[j, 1], norm(Yex[j,:]-Yap[j,:], 2)))
+    for j in range(t.size):
+        print("%4.2f: %f %f %f %f %E" % (t[j], Yex[0,j], Yex[1,j],
+                Yap[0,j], Yap[1,j], norm(Yex[:,j]-Yap[:,j], 2)))
 
     print("")

@@ -17,14 +17,16 @@
 from numpy import array,zeros
 
 def fdestim(fy, Y, h):
-    n = len(Y)
-    J = zeros([n, n])
+    n = Y.size
+    J = zeros([n,n])
+
     for dy in [-1.0, 1.0]:
         for i in range(n):
             Y1 = Y.copy()
-            Y1[i] += dy*h
+            Y1[i,0] += dy*h
             fval = fy(Y1)
-            J[:,i] += fval*dy
+            J[:,[i]] += fval*dy
 
     J /= (2.0*h)
+
     return(J)

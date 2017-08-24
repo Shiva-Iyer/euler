@@ -18,31 +18,28 @@
 from numpy import array,zeros
 
 def tdsolve(A, b):
-    if (A.ndim == 2 and b.ndim == 1):
-        m,n = A.shape
-        if (m != n or m != len(b)):
-            return(array([]))
-
-        for i in xrange(n):
-            for j in range(i-1) + range(i+2, n):
-                if (A[i,j] != 0.0):
-                    return(array([]))
-    else:
+    m,n = A.shape
+    if (m != n or m != b.size):
         return(array([]))
 
-    c = zeros(n-1)
-    c[0] = A[0,1] / A[0,0]
-    for i in xrange(1, n-1):
-        c[i] = A[i,i+1] / (A[i,i] - A[i,i-1]*c[i-1])
+    for i in range(n):
+        for j in list(range(i-1)) + list(range(i+2, n)):
+            if (A[i,j] != 0.0):
+                return(array([]))
 
-    d = zeros(n)
-    d[0] = b[0] / A[0,0]
-    for i in xrange(1, n):
-        d[i] = (b[i] - A[i,i-1]*d[i-1]) / (A[i,i] - A[i,i-1]*c[i-1])
+    c = zeros([n-1,1])
+    c[0,0] = A[0,1] / A[0,0]
+    for i in range(1, n-1):
+        c[i,0] = A[i,i+1] / (A[i,i] - A[i,i-1]*c[i-1,0])
 
-    x = zeros(n)
-    x[n-1] = d[n-1]
-    for i in xrange(n-2, -1, -1):
-        x[i] = d[i] - c[i]*x[i+1]
+    d = zeros([n,1])
+    d[0,0] = b[0,0] / A[0,0]
+    for i in range(1, n):
+        d[i,0] = (b[i,0]-A[i,i-1]*d[i-1,0])/(A[i,i]-A[i,i-1]*c[i-1,0])
+
+    x = zeros([n,1])
+    x[n-1,0] = d[n-1,0]
+    for i in range(n-2, -1, -1):
+        x[i,0] = d[i,0] - c[i,0]*x[i+1,0]
 
     return(x)

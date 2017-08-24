@@ -19,24 +19,24 @@ from numpy import array,zeros
 from numpy.linalg import norm
 
 def conjgrad(A, b, tol = 1E-12, maxiter = 10):
-    if (A.ndim == 2 and b.ndim == 1):
-        m,n = A.shape
-        if (m != n or m != len(b)):
-            return(array([]))
-    else:
+    m,n = A.shape
+    if (m != n or m != b.size):
         return(array([]))
 
-    x = zeros(n)
-    r,p = b,b
+    x = zeros([n,1])
+    r,p = b.copy(),b.copy()
+
     for iter in range(maxiter):
-        Ap = A.dot(p)
         nr = norm(r, 2)**2
 
-        alpha = nr / p.dot(Ap)
+        Ap = A.dot(p)
+        alpha = nr / p.T.dot(Ap)
         x = x + alpha*p
+
         r = r - alpha*Ap
         nnr = norm(r, 2)
-        beta = nnr**2 / nr
+
+        beta = nnr * nnr / nr
         p = r + beta*p
 
         if (nnr <= tol):

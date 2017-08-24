@@ -21,6 +21,20 @@ Contents
   solver   : Solvers for systems of equations
   test     : Example programs to demonstrate the library's functions
 
+Prerequisites
+-------------
+
+(1) Python version 2.7 or greater.
+(2) NumPy version 1.12 or greater.
+
+Installation
+------------
+
+The library is written in Python and therefore no installation step
+is needed. After cloning the source repository, just ensure that the
+PYTHONPATH environment variable contains ~/your_base_dir/euler. The
+examples in test/ do this automatically.
+
 Bugs
 ----
 

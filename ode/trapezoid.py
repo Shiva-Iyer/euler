@@ -21,27 +21,28 @@ from pde.jacobian import fdestim
 
 def trapezoid(f, dfdy, a, b, n, Y0):
     h = (b - a)/(n - 1.0)
-    I = eye(len(Y0))
-
     t = linspace(a, b, n)
-    Y = zeros([n, len(Y0)])
-    Y[0,:] = Y0
+
+    I = eye(Y0.size)
+    Y = zeros([Y0.size,n])
+    Y[:,[0]] = Y0[:,[0]].copy()
+
     for i in range(1, n):
-        guess = Y[i-1,:]
-	for iter in range(10):
-	    c = Y[i-1,:] + h*(f(t[i-1], guess) + \
-                f(t[i-1], Y[i-1,:]))/2.0 - guess
+        guess = Y[:,[i-1]]
+        for iter in range(10):
+            c = Y[:,[i-1]] + h*(f(t[i-1], guess) + \
+                f(t[i-1], Y[:,[i-1]]))/2.0 - guess
             if (norm(c, 2) <= 1E-12):
-		Y[i,:] = guess
-		break
+                Y[:,[i]] = guess[:,[0]]
+                break
 
             if (not dfdy is None):
-	        J = h*dfdy(t[i-1], guess)/2.0 - I
+                J = h*dfdy(t[i-1], guess)/2.0 - I
             else:
-	        J = h*fdestim(lambda z: f(t[i-1], z), guess, h)/2.0 - I
-                
-	    guess = guess - gausseli(J, c)
-	else:
+                J = h*fdestim(lambda z: f(t[i-1], z), guess, h)/2.0 - I
+
+            guess = guess - gausseli(J, c)
+        else:
             return(array([]), array([]))
 
     return(t, Y)

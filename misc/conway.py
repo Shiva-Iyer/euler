@@ -26,9 +26,9 @@ def life(I, gen, callback = None):
     P = zeros([m+2, n+2])
     P[1:m+1,1:n+1] = C.copy()
 
-    for g in xrange(1, gen):
-        for r in xrange(1, m+1):
-            for c in xrange(1, n+1):
+    for g in range(1, gen):
+        for r in range(1, m+1):
+            for c in range(1, n+1):
                 nbr = P[r-1,c-1] + P[r-1,c] + P[r-1,c+1] + \
                       P[r,c-1] + P[r,c+1] + \
                       P[r+1,c-1] + P[r+1,c] + P[r+1,c+1]

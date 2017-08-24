@@ -28,11 +28,11 @@ from interpol import spline as spln
 the data points. Xint is the set of points to interpolate on.
 """
 
-X = array([0.0, 30.0, 45.0, 60.0, 90.0])
-Y = array([sin(x*pi/180.0) for x in X])
+X = array([[0.0, 30.0, 45.0, 60.0, 90.0]]).T
+Y = array([[sin(x*pi/180.0) for x in X]]).T
 
-Xint = array(range(0, 100, 10), dtype = "float64")
-Yexa = array([sin(x*pi/180.0) for x in Xint])
+Xint = array([range(0, 100, 10)], dtype = "float64").T
+Yexa = array([[sin(x*pi/180.0) for x in Xint]]).T
 
 scheme = ["Newton divided differences", "Not-a-knot cubic spline",
           "Natural cubic spline", "Clamped cubic spline"]
@@ -48,7 +48,7 @@ for s in range(len(scheme)):
     print("%s method:" % (scheme[s]))
     print("%-4s: %-8s %-8s %-12s" % (
         "x(o)", "Exact", "Interp.", "Error"))
-    for i in range(len(Xint)):
+    for i in range(Xint.size):
         print("%4.1f: %f %f %E" % (
             Xint[i], Yexa[i], Yint[i], abs(Yexa[i] - Yint[i])))
 

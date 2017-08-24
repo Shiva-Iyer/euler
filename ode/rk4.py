@@ -18,15 +18,16 @@ from numpy import linspace,zeros
 
 def rk4(f, a, b, n, Y0):
     h = (b - a)/(n - 1.0)
-
     t = linspace(a, b, n)
-    Y = zeros([n, len(Y0)])
-    Y[0,:] = Y0
+
+    Y = zeros([Y0.size,n])
+    Y[:,[0]] = Y0[:,[0]].copy()
+
     for i in range(1, n):
-        k1 = h*f(t[i-1], Y[i-1,:])
-        k2 = h*f(t[i-1] + 0.5*h, Y[i-1,:] + 0.5*k1)
-        k3 = h*f(t[i-1] + 0.5*h, Y[i-1,:] + 0.5*k2)
-        k4 = h*f(t[i-1] + h, Y[i-1,:] + k3)
-        Y[i,:] = Y[i-1,:] + (k1 + k4)/6.0 + (k2 + k3)/3.0
+        k1 = h*f(t[i-1], Y[:,[i-1]])
+        k2 = h*f(t[i-1] + 0.5*h, Y[:,[i-1]] + 0.5*k1)
+        k3 = h*f(t[i-1] + 0.5*h, Y[:,[i-1]] + 0.5*k2)
+        k4 = h*f(t[i-1] + h, Y[:,[i-1]] + k3)
+        Y[:,[i]] = (Y[:,[i-1]] + (k1 + k4)/6.0 + (k2 + k3)/3.0)[:,[0]]
 
     return(t, Y)

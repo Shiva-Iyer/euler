@@ -28,10 +28,10 @@ def adams(f, a, b, n, Y0, s = 2):
         return(array([]), array([]))
 
     h = (b - a)/(n - 1.0)
-
     t = linspace(a, b, n)
-    Y = zeros([n, len(Y0)])
-    Y[0,:] = Y0
+
+    Y = zeros([Y0.size,n])
+    Y[:,[0]] = Y0[:,[0]].copy()
 
     for i in range(1, n):
         if (i > s - 1):
@@ -39,10 +39,10 @@ def adams(f, a, b, n, Y0, s = 2):
         else:
             r = i - 1
 
-        z = zeros(len(Y0))
+        z = zeros([Y0.size,1])
         for j in range(r + 1):
-            z += _K[r,j]*f(t[i-j-1], Y[i-j-1,:])
+            z += _K[r,j]*f(t[i-j-1], Y[:,[i-j-1]])
 
-        Y[i,:] = Y[i-1,:] + h*z
+        Y[:,[i]] = (Y[:,[i-1]] + h*z)[:,[0]]
 
     return(t, Y)

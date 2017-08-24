@@ -15,23 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from cmath import exp,phase
-from numpy import array,eye,outer
+from numpy import array,eye
 from numpy.linalg import norm
 
 def decomp(A):
-    if (A.ndim == 0):
-        m,n = 1,1
-    elif (A.ndim == 1):
-        m,n = len(A),1
-    else:
-        m,n = A.shape
-
+    m,n = A.shape
     I = eye(m, dtype = A.dtype)
     Q = eye(m, dtype = A.dtype)
 
-    for c in xrange(m-1):
+    for c in range(m-1):
         if (n != 1):
-            x = Q.dot(A)[c:,c]
+            x = Q.dot(A)[c:,[c]]
         else:
             x = Q.dot(A)[c:]
 
@@ -43,12 +37,13 @@ def decomp(A):
         else:
             continue
 
-        u = x - a*I[c:,c]
+        u = x - a*I[c:,[c]]
         v = u / norm(u, 2)
+        vct = v.conj().T
 
-        Qc = eye(m, dtype = A.dtype)
-        Qc[c:,c:] = I[c:,c:] - (1.0 + x.conj().dot(v) / \
-                    v.conj().dot(x)) * outer(v, v.conj())
+        Qc = I.copy()
+        Qc[c:,c:] = I[c:,c:] - (1.0 + x.conj().T.dot(v) /
+                                vct.dot(x)) * v.dot(vct)
         Q = Qc.dot(Q)
 
     R = Q.dot(A)

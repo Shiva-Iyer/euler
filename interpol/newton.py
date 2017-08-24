@@ -18,29 +18,30 @@
 from numpy import array,zeros
 
 def ddtable(X, Y):
-    n = len(X)
-    if (n != len(Y)):
+    n = X.size
+    if (n != Y.size):
         return(array([]))
 
-    D = zeros([n, n])
-    D[:,0] = Y
+    D = zeros([n,n])
+    D[:,[0]] = Y[:,[0]]
     for c in range(1, n):
         for r in range(n-c):
-            D[r,c] = (D[r+1,c-1] - D[r,c-1]) / (X[c+r] - X[r])
+            D[r,c] = (D[r+1,c-1] - D[r,c-1]) / (X[c+r,0] - X[r,0])
 
     return(D)
 
 def interp(D, X, Xint):
-    m = len(Xint)
-    n = len(X)
+    m = Xint.size
+    n = X.size
 
-    Yint = zeros(m)
+    Yint = zeros([m,1])
+
     for i in range(m):
         for c in range(n):
-            bas = array(D[0,c])
+            bas = D[0,[c]].copy()
             for r in range(c):
-                bas *= (Xint[i] - X[r])
+                bas *= (Xint[i,0] - X[r,0])
 
-            Yint[i] += bas
+            Yint[i,[0]] += bas
 
     return(Yint)

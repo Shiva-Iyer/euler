@@ -22,24 +22,18 @@ If LDLform = False: Cholesky decompose Hermitian positive-definite A
 such that A = LL*. If LDLform = True: decompose A such that A = LDL*
 """
 def decomp(A, LDLform = False):
-    if (A.ndim == 2):
-        m,n = A.shape
-        if (m != n):
-            return(array([]))
-    elif (A.ndim == 0):
-        A = array([[A, 0.0], [0, 0]])
-        m,n = 1,1
-    else:
+    m,n = A.shape
+    if (m != n):
         return(array([]))
 
     if (LDLform):
         L = eye(n, dtype = A.dtype)
-        D = zeros([n, n], dtype = A.dtype)
-        for i in xrange(n):
+        D = zeros([n,n], dtype = A.dtype)
+        for i in range(n):
             D[i,i] = A[i,i]
-            for j in xrange(i):
+            for j in range(i):
                 L[i,j] = A[i,j]
-                for k in xrange(j):
+                for k in range(j):
                     L[i,j] -= L[i,k]*L[j,k].conj()*D[k,k]
 
                 L[i,j] /= D[j,j]
@@ -47,12 +41,12 @@ def decomp(A, LDLform = False):
 
         return(L, D)
     else:
-        L = zeros([n, n], dtype = A.dtype)
-        for i in xrange(n):
+        L = zeros([n,n], dtype = A.dtype)
+        for i in range(n):
             L[i,i] = A[i,i]
-            for j in xrange(i):
+            for j in range(i):
                 L[i,j] = A[i,j]
-                for k in xrange(j):
+                for k in range(j):
                     L[i,j] -= L[i,k]*L[j,k].conj()
 
                 L[i,j] /= L[j,j]
@@ -64,25 +58,22 @@ def decomp(A, LDLform = False):
 
 def solve(A, b):
     L,D = decomp(A, LDLform = True)
-    if (len(L) == 0):
+    if (L.size == 0):
         return(L)
 
-    if (b.ndim == 0):
-        b = array([b])
-    
-    n = len(b)
+    n = b.size
     x = b.copy()
-    for i in xrange(n):
-        for j in xrange(i):
-            x[i] -= L[i,j]*x[j]
+    for i in range(n):
+        for j in range(i):
+            x[i,0] -= L[i,j]*x[j,0]
 
-        x[i] /= L[i,i]
+        x[i,0] /= L[i,i]
 
     L = D.dot(L.T)
-    for i in xrange(n-1, -1, -1):
-        for j in xrange(i+1, n):
-            x[i] -= L[i,j]*x[j]
+    for i in range(n-1, -1, -1):
+        for j in range(i+1, n):
+            x[i,0] -= L[i,j]*x[j,0]
 
-        x[i] /= L[i,i]
+        x[i,0] /= L[i,i]
 
     return(x)

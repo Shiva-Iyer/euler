@@ -30,10 +30,10 @@ having the unique solution (3, 1, 4).
 """
 
 A = array([[1.0, 1, 1], [2, 3, -4], [3, -5, -7]])
-b = array([8.0, -7, -24])
+b = array([[8.0, -7, -24]]).T
 
 x = gausseli(A, b)
-print("Unique solution for invertible A matrix           : " + str(x))
+print("Unique solution for invertible A matrix           : " + str(x.T[0]))
 
 """ Solve the system x+y+z = 8, 2*x+3*y-4*z = -7, 2*x+2*y+2*z = 16
 having an infinite number of solutions, i.e. a consistent, 
@@ -41,30 +41,31 @@ underconstrained system.
 """
 
 A = array([[1.0, 1, 1], [2, 3, -4], [2, 2, 2]])
-b = array([8.0, -7, 16])
+b = array([[8.0, -7, 16]]).T
 
 x = gausseli(A, b)
-print("A solution for consistent, underconstrained system: " + str(x))
+print("A solution for consistent, underconstrained system: " + str(x.T[0]))
 
 """ Solve the system x+y+z = 8, 3*x+3*y+3*z = 8, 3*x-5*y-7*z = -24
 having no solutions, i.e. an inconsistent system.
 """
 
 A = array([[1.0, 1, 1], [3, 3, 3], [3, -5, -7]])
-b = array([8.0, 8, -24])
+b = array([[8.0, 8, -24]]).T
 
 x = gausseli(A, b)
-print("Solution for inconsistent system                  : " + str(x) + "\n")
+print("Solution for inconsistent system                  : " + str(x))
+print("")
 
 """ Solve the tridiagonal system x-y = -5, 2x-y+3z = 0, y-6z = 1
 having the unique solution (2, 7, 1).
 """
 
 A = array([[1.0, -1.0, 0.0], [2.0, -1.0, 3.0], [0.0, 1.0, -6.0]])
-b = array([-5.0, 0.0, 1.0])
+b = array([[-5.0, 0.0, 1.0]]).T
 
 x = tdsolve(A, b)
-print("Solution for tridiagonal system                   : " + str(x))
+print("Solution for tridiagonal system                   : " + str(x.T[0]))
 print("")
 
 """ Solve the symmetric positive-definite system below having unique
@@ -72,10 +73,10 @@ solution (1/2, 1/3, 1/5) using the conjugate gradient method
 """
 
 A = array([[2.0, -1.0, 0.0], [-1.0, 2.0, -1.0], [0.0, -1.0, 2.0]])
-b = array([2.0/3.0, -1.0/30.0, 1.0/15.0])
+b = array([[2.0/3.0, -1.0/30.0, 1.0/15.0]]).T
 
 x,iter = conjgrad(A, b)
-print("Conjugate gradient soln (%3d iter) for SPD system : %s" % (iter, str(x)))
+print("Conjugate gradient soln (%3d iter) for SPD system : %s" % (iter, str(x.T[0])))
 print("")
 
 """ Solve the symmetric positive-definite system below having unique
@@ -83,7 +84,7 @@ solution (-2, 3, -5) using Cholesky decomposition
 """
 
 A = array([[4.0, 12, -16], [12, 37, -43], [-16, -43, 98]])
-b = array([108.0, 302, -587])
+b = array([[108.0, 302, -587]]).T
 
 x = solve(A, b)
-print("Cholesky decomposition solution for SPD system    : " + str(x))
+print("Cholesky decomposition solution for SPD system    : " + str(x.T[0]))

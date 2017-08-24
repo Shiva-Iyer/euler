@@ -19,7 +19,7 @@ from numpy.linalg import norm
 from linalg.gausseli import gausseli
 from pde.jacobian import fdestim
 
-def newton(f, dfdy, Y0, tol = 1E-12, maxiter = 20):
+def newton(f, dfdy, Y0, tol = 1E-12, maxiter = 10):
     for iter in range(maxiter):
         c = f(Y0)
         if (not dfdy is None):
@@ -35,4 +35,4 @@ def newton(f, dfdy, Y0, tol = 1E-12, maxiter = 20):
     else:
         Y = array([])
 
-    return(Y, iter + 1)
+    return(Y, iter+1)

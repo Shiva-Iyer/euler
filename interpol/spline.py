@@ -22,14 +22,14 @@ def cspline(X, Y, type = 0, slope = array([0.0, 0.0])):
     if (not type in range(3)):
         return(array([]))
 
-    n = len(X)
-    if (n != len(Y)):
+    n = X.size
+    if (n != Y.size):
         return(array([]))
 
-    A = zeros([n, n])
-    b = zeros(n)
-    h = [X[i+1] - X[i] for i in range(n-1)]
-    g = [Y[i+1] - Y[i] for i in range(n-1)]
+    A = zeros([n,n])
+    b = zeros([n,1])
+    h = [X[i+1,0] - X[i,0] for i in range(n-1)]
+    g = [Y[i+1,0] - Y[i,0] for i in range(n-1)]
     for i in range(1, n-1):
         A[i,i-1:i+2] = [h[i-1], 2.0*(h[i-1] + h[i]), h[i]]
         b[i] = 3.0*(g[i]/h[i] - g[i-1]/h[i-1])
@@ -51,32 +51,33 @@ def cspline(X, Y, type = 0, slope = array([0.0, 0.0])):
     else:
         c = tdsolve(A, b)
 
-    S = zeros([n - 1, 4])
-    S[:,0] = Y[:n-1]
-    S[:,2] = c[:n-1]
+    S = zeros([n-1,4])
+    S[:,[0]] = Y[:n-1,[0]].copy()
+    S[:,[2]] = c[:n-1,[0]]
     for i in range(n-1):
-        S[i,1] = (Y[i+1]-Y[i])/h[i] - h[i]*(2.0*c[i] + c[i+1])/3.0
-        S[i,3] = (c[i+1] - c[i]) / (3.0*h[i])
+        S[i,[1]] = (Y[i+1,0]-Y[i,0])/h[i] - h[i]*(2.0*c[i] + c[i+1])/3.0
+        S[i,[3]] = (c[i+1] - c[i]) / (3.0*h[i])
 
     return(S)
 
 def interp(S, X, Xint):
-    m = len(Xint)
-    n = len(X)
+    m = Xint.size
+    n = X.size
 
-    Yint = zeros(m)
+    Yint = zeros([m,1])
+
     for i in range(m):
-        for j in range(n - 1):
-            if (Xint[i] >= X[j] and Xint[i] < X[j+1]):
+        for j in range(n-1):
+            if (Xint[i,0] >= X[j,0] and Xint[i,0] < X[j+1,0]):
                 r = j
                 break
         else:
-            if (Xint[i] < X[0]):
+            if (Xint[i,0] < X[0,0]):
                 r = 0
             else:
                 r = n - 2
 
-        x = Xint[i] - X[r]
-        Yint[i] = S[r,0] + (S[r,1] + (S[r,2] + S[r,3]*x)*x)*x
+        x = Xint[i,0] - X[r,0]
+        Yint[i,0] = S[r,0] + (S[r,1] + (S[r,2] + S[r,3]*x)*x)*x
 
     return(Yint)

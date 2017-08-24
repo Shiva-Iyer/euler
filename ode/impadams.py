@@ -31,11 +31,11 @@ def impadams(f, dfdy, a, b, n, Y0, s = 2):
         return(array([]), array([]))
 
     h = (b - a)/(n - 1.0)
-    I = eye(len(Y0))
-
     t = linspace(a, b, n)
-    Y = zeros([n, len(Y0)])
-    Y[0,:] = Y0
+
+    I = eye(Y0.size)
+    Y = zeros([Y0.size,n])
+    Y[:,[0]] = Y0[:,[0]].copy()
 
     for i in range(1, n):
         if (i >= s):
@@ -43,16 +43,16 @@ def impadams(f, dfdy, a, b, n, Y0, s = 2):
         else:
             r = i
 
-        guess = Y[i-1,:]
-	for iter in range(10):
+        guess = Y[:,[i-1]]
+        for iter in range(10):
             c = _K[r,0]*f(t[i-1], guess)
             for j in range(1, r+1):
-                c += _K[r,j]*f(t[i-j], Y[i-j])
+                c += _K[r,j]*f(t[i-j], Y[:,[i-j]])
 
-            c = Y[i-1,:] + h*c - guess
+            c = Y[:,[i-1]] + h*c - guess
             if (norm(c, 2) <= 1E-12):
-		Y[i,:] = guess
-		break
+                Y[:,[i]] = guess[:,[0]]
+                break
 
             if (not dfdy is None):
                 J = h*_K[r,0]*dfdy(t[i-1], guess) - I

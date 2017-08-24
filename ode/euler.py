@@ -18,11 +18,12 @@ from numpy import linspace,zeros
 
 def euler(f, a, b, n, Y0):
     h = (b - a)/(n - 1.0)
-
     t = linspace(a, b, n)
-    Y = zeros([n, len(Y0)])
-    Y[0,:] = Y0
+
+    Y = zeros([Y0.size,n])
+    Y[:,[0]] = Y0[:,[0]].copy()
+
     for i in range(1, n):
-        Y[i,:] = Y[i-1,:] + h*f(t[i-1], Y[i-1,:])
+        Y[:,[i]] = Y[:,[i-1]] + h*f(t[i-1], Y[:,[i-1]])
 
     return(t, Y)

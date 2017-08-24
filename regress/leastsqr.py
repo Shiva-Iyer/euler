@@ -23,7 +23,8 @@ def linear(X, y):
 
 def nonlin(x, y, beta0, r, drdb, tol = 1E-6, maxiter = 10):
     beta = beta0.copy()
-    for iter in xrange(maxiter):
+
+    for iter in range(maxiter):
         res = r(x, y, beta)
         Jr = drdb(x, y, beta)
         Jrct = Jr.conj().T

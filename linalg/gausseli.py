@@ -18,42 +18,39 @@
 from numpy import array
 
 def gausseli(A, b):
-    if (A.ndim == 2 and b.ndim == 1):
-        m,n = A.shape
-        if (m != n or m != len(b)):
-            return(array([]))
-    else:
+    m,n = A.shape
+    if (m != n or m != b.size):
         return(array([]))
 
-    C,x = A.copy(), b.copy()
-    for i in xrange(m):
+    C,x = A.copy(),b.copy()
+    for i in range(m):
         max = i
-        for j in xrange(i+1, m):
+        for j in range(i+1,m):
             if (abs(C[j,i]) > abs(C[max,i])):
                 max = j
 
         if (max != i):
-            C[i,:], C[max,:] = C[max,:].copy(), C[i,:].copy()
-            x[i], x[max] = x[max], x[i]
+            C[i,:],C[max,:] = C[max,:].copy(),C[i,:].copy()
+            x[i,0],x[max,0] = x[max,0],x[i,0]
 
         if (C[i,i] == 0.0):
             continue
 
-        for j in xrange(i+1, m):
+        for j in range(i+1,m):
             if (C[j,i] != 0.0):
                 mul = C[j,i]/C[i,i]
                 C[j,:] = C[j,:] - C[i,:]*mul
-                x[j] -= x[i]*mul
+                x[j,0] -= x[i,0]*mul
 
-    for i in xrange(m-1, -1, -1):
-        for j in xrange(i + 1, m):
-            x[i] -= C[i,j]*x[j]
+    for i in range(m-1,-1,-1):
+        for j in range(i+1,m):
+            x[i,0] -= C[i,j]*x[j,0]
        
         if (C[i,i] != 0.0):
-            x[i] /= C[i,i]
+            x[i,0] /= C[i,i]
         else:
-            if (x[i] == 0.0):
-                x[i] = 1.0
+            if (x[i,0] == 0.0):
+                x[i,0] = 1.0
             else:
                 return(array([]))
 
