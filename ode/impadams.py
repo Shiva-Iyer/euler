@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from numpy import array,eye,linspace,zeros
+from numpy import array,eye,zeros
 from numpy.linalg import norm
 from linalg.gausseli import gausseli
 from pde.jacobian import fdestim
@@ -26,23 +26,21 @@ _K = array([[1.0, 0, 0, 0, 0, 0],
             [x/720.0 for x in [251, 646, -264, 106, -19, 0]],
             [x/1440.0 for x in [475, 1427, -798, 482, -173, 27]]])
 
-def impadams(f, dfdy, a, b, n, Y0, s = 2):
+def impadams(f, dfdy, Y0, t, s = 2):
     if (s < 0 or s > 5):
-        return(array([]), array([]))
-
-    h = (b - a)/(n - 1.0)
-    t = linspace(a, b, n)
+        return(array([]))
 
     I = eye(Y0.size)
-    Y = zeros([Y0.size,n])
+    Y = zeros([Y0.size,t.size])
     Y[:,[0]] = Y0[:,[0]].copy()
 
-    for i in range(1, n):
+    for i in range(1, t.size):
         if (i >= s):
             r = s
         else:
             r = i
 
+        h = t[i] - t[i-1]
         guess = Y[:,[i-1]]
         for iter in range(10):
             c = _K[r,0]*f(t[i-1], guess)
@@ -61,6 +59,6 @@ def impadams(f, dfdy, a, b, n, Y0, s = 2):
 
             guess = guess - gausseli(J, c)
         else:
-            return(array([]), array([]))
+            return(array([]))
 
-    return(t, Y)
+    return(Y)

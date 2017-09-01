@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from numpy import array,linspace,zeros
+from numpy import array,zeros
 
 _K = array([[1.0, 0, 0, 0, 0, 0],
             [1.5, -0.5, 0, 0, 0, 0],
@@ -23,17 +23,14 @@ _K = array([[1.0, 0, 0, 0, 0, 0],
             [x/720.0 for x in [1901, -2774, 2616, -1274, 251, 0]],
             [x/1440.0 for x in [4277, -7923, 9982, -7298, 2877, -475]]])
 
-def adams(f, a, b, n, Y0, s = 2):
+def adams(f, Y0, t, s = 2):
     if (s < 1 or s > 6):
-        return(array([]), array([]))
+        return(array([]))
 
-    h = (b - a)/(n - 1.0)
-    t = linspace(a, b, n)
-
-    Y = zeros([Y0.size,n])
+    Y = zeros([Y0.size,t.size])
     Y[:,[0]] = Y0[:,[0]].copy()
 
-    for i in range(1, n):
+    for i in range(1, t.size):
         if (i > s - 1):
             r = s - 1
         else:
@@ -43,6 +40,6 @@ def adams(f, a, b, n, Y0, s = 2):
         for j in range(r + 1):
             z += _K[r,j]*f(t[i-j-1], Y[:,[i-j-1]])
 
-        Y[:,[i]] = (Y[:,[i-1]] + h*z)[:,[0]]
+        Y[:,[i]] = (Y[:,[i-1]] + (t[i] - t[i-1])*z)[:,[0]]
 
-    return(t, Y)
+    return(Y)

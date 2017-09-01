@@ -17,7 +17,7 @@
 import sys
 from os import path
 from math import cos,exp,sin
-from numpy import array
+from numpy import array,linspace
 from numpy.linalg import norm
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
@@ -39,37 +39,36 @@ The exact solution of this system is y(t) = [exp(0.2*t)*cos(t)]
 
 e = 0.2
 A = array([[e, -1], [1, e]])
-Y0 = array([[1.0], [0]])
 
 f = lambda t,Y: A.dot(Y)
 dfdy = lambda t,Y: A
 
-b = 1
-n = 20 + 1
+Y0 = array([[1.0], [0.0]])
+t = linspace(0.0, 1.0, 20+1)
 
 scheme = ["Euler", "Implicit Euler", "Trapezoidal",
           "4th order Runge-Kutta", "4-step Adams-Bashforth",
           "4-step Adams-Moulton"]
 for i in range(len(scheme)):
     if (i == 0):
-        t,Yap = euler(f, 0, b, n, Y0)
+        Yap = euler(f, Y0, t)
         Yex = array([[exp(e*x)*cos(x), exp(e*x)*sin(x)] for x in t]).T
     elif (i == 1):
-        t,Yap = impeuler(f, dfdy, 0, b, n, Y0)
+        Yap = impeuler(f, dfdy, Y0, t)
     elif (i == 2):
-        t,Yap = trapezoid(f, dfdy, 0, b, n, Y0)
+        Yap = trapezoid(f, dfdy, Y0, t)
     elif (i == 3):
-        t,Yap = rk4(f, 0, b, n, Y0)
+        Yap = rk4(f, Y0, t)
     elif (i == 4):
-        t,Yap = adams(f, 0, b, n, Y0, 4)
+        Yap = adams(f, Y0, t, 4)
     elif (i == 5):
-        t,Yap = impadams(f, None, 0, b, n, Y0, 3)
+        Yap = impadams(f, None, Y0, t, 3)
 
     print("%s method:" % scheme[i])
-    print("%-5s %-17s %-17s %-12s" % ("Time", "Exact value",
+    print("%-7s %-17s %-17s %-12s" % ("Time", "Exact value",
                 "Approximation", "Error norm"))
     for j in range(t.size):
-        print("%4.2f: %f %f %f %f %E" % (t[j], Yex[0,j], Yex[1,j],
+        print("%6.4f: %f %f %f %f %E" % (t[j], Yex[0,j], Yex[1,j],
                 Yap[0,j], Yap[1,j], norm(Yex[:,j]-Yap[:,j], 2)))
 
     print("")

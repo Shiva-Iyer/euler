@@ -14,16 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from numpy import linspace,zeros
+from numpy import zeros
 
-def euler(f, a, b, n, Y0):
-    h = (b - a)/(n - 1.0)
-    t = linspace(a, b, n)
-
-    Y = zeros([Y0.size,n])
+def euler(f, Y0, t):
+    Y = zeros([Y0.size,t.size])
     Y[:,[0]] = Y0[:,[0]].copy()
 
-    for i in range(1, n):
-        Y[:,[i]] = Y[:,[i-1]] + h*f(t[i-1], Y[:,[i-1]])
+    for i in range(1, t.size):
+        Y[:,[i]] = Y[:,[i-1]] + (t[i] - t[i-1])*f(t[i-1], Y[:,[i-1]])
 
-    return(t, Y)
+    return(Y)
