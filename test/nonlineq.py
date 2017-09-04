@@ -21,6 +21,7 @@ from numpy import array
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 from solver.newton import newton
+from solver.polynom import roots
 
 """ Solve the system y^2 - x*y = 4, x^2 - xy = -3, which has solutions
 (-3,-4) and (3,4).
@@ -54,3 +55,15 @@ Y,iter = newton(f, dfdy, Y0)
 print("")
 print("Linear sys.: %2d iter. from [0, 0, 0]: x = %9.6f, y = %9.6f, z = %9.6f" % (
     iter, Y[0], Y[1], Y[2]))
+
+"""
+Find the roots of the polynomial x^3 + 3x^2 + 3x + 1 = 0 = (x + 1)^3
+having the repeated root -1 with multiplicity 3.
+"""
+
+ply = array([[1.0, 3.0, 3.0, 1.0]]).T
+rts,iter = roots(ply, tol = 1E-4, maxiter = 20)
+
+print("")
+print("Poly. roots:  %2d iterations: \n\t%s, \n\t%s, \n\t%s" % (
+    iter, rts[0,0], rts[1,0], rts[2,0]))
