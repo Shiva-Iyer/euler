@@ -17,6 +17,7 @@
 from math import cos,sin,pi
 from numpy import abs,array,max,min,sum,zeros
 from numpy.linalg import norm
+from linalg.gausseli import gausseli
 
 def polyval(ply, x):
     val = 0.0
@@ -27,12 +28,52 @@ def polyval(ply, x):
 
     return(val)
 
-def polyder(ply, x):
-    der = 0.0
-    for i in range(ply.size - 2):
-        der = (der + (ply.size - i - 1.0) * ply[i,0]) * x
+def polyadd(pl1, pl2):
+    if (pl1.size >= pl2.size):
+        x = pl1.copy()
+        y = pl2
+    else:
+        x = pl2.copy()
+        y = pl1
 
-    der += ply[-2,0]
+    x[-y.size:,0] += y[:,0]
+
+    return(x)
+
+def polymul(pl1, pl2):
+    if (pl1.dtype == "complex" or pl2.dtype == "complex"):
+        mul = zeros([pl1.size+pl2.size-1,1], dtype = "complex")
+    else:
+        mul = zeros([pl1.size+pl2.size-1,1])
+
+    for i in range(pl1.size):
+        mul[i:i+pl2.size,0] += pl1[i,0]*pl2[:,0]
+
+    return(mul)
+
+def polydiv(num, den):
+    if (num.size < den.size):
+        return(array([]))
+
+    A = zeros([num.size,num.size], dtype = num.dtype)
+
+    for i in range(den.size):
+        for j in range(num.size-den.size+1):
+            A[i+j,j] = den[i,0]
+
+    for i in range(den.size-1):
+        A[-i-1,-i-1] = 1.0
+
+    b = gausseli(A, num)
+
+    quo = b[:num.size-den.size+1,0]
+    rem = b[num.size-den.size+1:,0]
+
+    return(quo, rem)
+
+def polyder(ply):
+    der = array([[(ply.size-i-1.0) * ply[i,0]
+                  for i in range(ply.size-1)]], dtype = ply.dtype).T
 
     return(der)
 
@@ -56,7 +97,7 @@ def roots(ply, tol = 1E-3, maxiter = 20):
     cor = zeros([n-1,1], dtype = "complex")
     for iter in range(maxiter):
         for i in range(n - 1):
-            rat = polyval(ply, rts[i,0]) / polyder(ply, rts[i,0])
+            rat = polyval(ply, rts[i,0]) / polyval(polyder(ply), rts[i,0])
 
             s = 0.0
             for j in range(n - 1):
