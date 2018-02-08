@@ -20,18 +20,18 @@ from linalg.gausseli import gausseli
 from pde.jacobian import fdestim
 
 def newton(f, dfdy, Y0, tol = 1E-12, maxiter = 10):
+    Y = Y0.copy()
     for iter in range(maxiter):
-        c = f(Y0)
-        if (not dfdy is None):
-            J = dfdy(Y0)
-        else:
-            J = fdestim(f, Y0, 1E-2)
-
-        Y = Y0 - gausseli(J, c)
-        if (norm(Y - Y0, 2) <= tol):
+        c = f(Y)
+        if (norm(c, 2) <= tol):
             break
 
-        Y0 = Y
+        if (not dfdy is None):
+            J = dfdy(Y)
+        else:
+            J = fdestim(f, Y, 1E-2)
+
+        Y -= gausseli(J, c)
     else:
         Y = array([])
 
